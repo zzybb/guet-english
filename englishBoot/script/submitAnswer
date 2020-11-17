@@ -1,0 +1,40 @@
+const fetch = require('node-fetch');
+var FormData = require('form-data');
+module.exports = function submitAnswer(url,cookie,answer) {
+    return new Promise((resolve,reject)=>{
+        let answerObj = getAnswerObj(answer);
+
+        let options = {
+            url: url,
+            method: 'POST',
+            body:answerObj,
+            headers: {
+                "Cookie": cookie,
+            }
+        };
+
+
+        fetch(url, options)
+            .then(res => {
+                resolve("填写成功！")
+            })
+            .catch(err => {
+                reject("填写失败！，失败原因:" + err);
+            })
+    })
+
+};
+
+function getAnswerObj(answer){
+    let formData = new FormData();
+    for (let i = 0; i < answer.length;i++){
+        formData.append("setdaan",answer[i] === "无效行" ? "" : answer[i]);
+        formData.append("zhinan","");
+    }
+    formData.append("end","");
+    console.log(formData);
+    return formData;
+}
+
+
+
